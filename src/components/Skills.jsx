@@ -12,21 +12,24 @@ import {
 } from "react-icons/si";
 
 function Skills() {
-  const skills = [
-    { name: "Docker", icon: <FaDocker /> },
-    { name: "Kubernetes", icon: <SiKubernetes /> },
-    { name: "GitHub Actions", icon: <SiGithubactions /> },
-    { name: "Prometheus", icon: <SiPrometheus /> },
-    { name: "Grafana", icon: <SiGrafana /> },
-    { name: "AWS", icon: <FaAws /> },
-    { name: "Linux", icon: <FaLinux /> },
-    { name: "Git", icon: <SiGit /> },
-    { name: "Nginx", icon: <SiNginx /> },
-    { name: "Networking", icon: "🌐" },
-    { name: "Troubleshooting", icon: "🛠️" },
-    { name: "CI/CD", icon: "🚀" },
-  ];
+const skills = [
+  { name: "Docker", icon: <FaDocker />, type: "DevOps" },
+  { name: "Kubernetes", icon: <SiKubernetes />, type: "DevOps" },
+  { name: "GitHub Actions", icon: <SiGithubactions />, type: "CI/CD" },
+  { name: "CI/CD", icon: "🚀", type: "CI/CD" },
 
+  { name: "Prometheus", icon: <SiPrometheus />, type: "Monitoring" },
+  { name: "Grafana", icon: <SiGrafana />, type: "Monitoring" },
+
+  { name: "AWS", icon: <FaAws />, type: "Cloud" },
+  { name: "Linux", icon: <FaLinux />, type: "Cloud" },
+  { name: "Nginx", icon: <SiNginx />, type: "Cloud" },
+
+  { name: "Git", icon: <SiGit />, type: "Version Control" },
+
+  { name: "Networking", icon: "🌐", type: "Infra" },
+  { name: "Troubleshooting", icon: "🛠️", type: "Support" },
+];
   return (
     <motion.section
       id="skills"
@@ -41,7 +44,7 @@ function Skills() {
       </p>
 
       <h2 className="text-4xl md:text-5xl font-bold mt-4">
-        Tools & Technologies
+        Core Skills & Technologies
       </h2>
 
       <p className="mt-5 text-lg text-gray-700 max-w-2xl leading-8">
@@ -65,6 +68,10 @@ function Skills() {
             <h3 className="text-lg font-semibold">
               {skill.name}
             </h3>
+
+	     <p className="text-sm text-gray-500 mt-1">
+  		{skill.type}
+	     </p>
           </motion.div>
         ))}
       </div>
