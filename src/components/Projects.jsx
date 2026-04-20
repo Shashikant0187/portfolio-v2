@@ -13,33 +13,35 @@ import {
 } from "react-icons/si";
 
 function Projects() {
-  const projects = [
-    {
-      title: "DevOps CI/CD Pipeline",
-      desc:
-        "Built an end-to-end CI/CD pipeline using GitHub Actions to build Docker images, push them to registry, and deploy workloads on Kubernetes.",
-      tech: ["GitHub Actions", "Docker", "Kubernetes"],
-      icon: <SiGithubactions />,
-      link: "https://github.com/Shashikant0187",
-    },
-    {
-      title: "Kubernetes Monitoring Stack",
-      desc:
-        "Implemented monitoring using Prometheus and Grafana for containerized workloads with dashboards, alerts, and performance visibility.",
-      tech: ["Prometheus", "Grafana", "K8s"],
-      icon: <SiPrometheus />,
-      link: "https://github.com/Shashikant0187",
-    },
-    {
-      title: "Portfolio Auto Deploy",
-      desc:
-        "Created a responsive React portfolio website with modern UI and automated deployment workflow using GitHub and hosting platforms.",
-      tech: ["React", "Tailwind", "Vercel"],
-      icon: <FaDocker />,
-      link: "https://github.com/Shashikant0187",
-    },
-  ];
-
+const projects = [
+  {
+    title: "DevOps CI/CD Pipeline",
+    desc:
+      "Designed and implemented an automated CI/CD pipeline using GitHub Actions to build Docker images and deploy applications on Kubernetes, reducing manual deployment effort and ensuring faster release cycles.",
+    tech: ["GitHub Actions", "Docker", "Kubernetes"],
+    icon: <SiGithubactions />,
+    link: "https://github.com/Shashikant0187",
+    highlight: "Automated build → deploy pipeline",
+  },
+  {
+    title: "Kubernetes Monitoring Stack",
+    desc:
+      "Built a monitoring and observability stack using Prometheus and Grafana to track application performance, visualize metrics, and enable proactive issue detection.",
+    tech: ["Prometheus", "Grafana", "Kubernetes"],
+    icon: <SiPrometheus />,
+    link: "https://github.com/Shashikant0187",
+    highlight: "Real-time monitoring & alerting",
+  },
+  {
+    title: "Portfolio Auto Deployment",
+    desc:
+      "Developed a responsive portfolio with React and integrated CI/CD for automatic deployment using GitHub and Vercel, ensuring continuous delivery on every code push.",
+    tech: ["React", "Tailwind", "Vercel"],
+    icon: <FaExternalLinkAlt />,
+    link: "https://github.com/Shashikant0187",
+    highlight: "Auto deployment pipeline",
+  },
+];
   return (
     <motion.section
       id="projects"
@@ -80,7 +82,9 @@ function Projects() {
             <h3 className="text-2xl font-bold">
               {project.title}
             </h3>
-
+<p className="mt-2 text-sm text-teal-400 font-medium">
+  {project.highlight}
+</p>
             {/* Desc */}
             <p className="mt-5 text-gray-300 leading-8">
               {project.desc}
