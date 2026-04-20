@@ -37,9 +37,13 @@ function Hero() {
             View Projects
           </a>
 
-          <button className="border-2 border-slate-900 px-7 py-3 rounded-xl hover:bg-slate-900 hover:text-white transition">
-            Resume
-          </button>
+<a
+  href="/Shashikant_Uikey_Resume.pdf"
+  download
+  className="border-2 border-slate-900 px-7 py-3 rounded-xl hover:bg-slate-900 hover:text-white transition"
+>
+  Download Resume
+</a>
         </div>
 
         <div className="flex gap-5 mt-10 text-3xl">
