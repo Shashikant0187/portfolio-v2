@@ -49,7 +49,7 @@ const projects = [
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
       viewport={{ once: true }}
-      className="px-8 md:px-16 py-24 bg-[#0f172a] text-white"
+      className="px-8 md:px-16 py-24 bg-[#0f172a] text-white snap-start min-h-screen"
     >
       <p className="text-teal-400 font-semibold tracking-wide">
         PROJECTS

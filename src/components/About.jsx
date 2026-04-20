@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 function About() {
 return (
 <motion.section id="about" initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration:
-  0.7 }} viewport={{ once: true }} className="px-8 md:px-16 py-24 bg-white grid md:grid-cols-2 gap-16">
+  0.7 }} viewport={{ once: true }} className="px-8 md:px-16 py-24 bg-white grid md:grid-cols-2 gap-16 snap-start min-h-screen">
   {/* Left */}
   <div>
     <p className="text-teal-600 font-semibold tracking-wide">

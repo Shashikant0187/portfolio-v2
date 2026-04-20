@@ -11,7 +11,7 @@ function Contact() {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
       viewport={{ once: true }}
-      className="px-8 md:px-16 py-24 bg-white"
+      className="px-8 md:px-16 py-24 bg-white snap-start"
     >
       <div className="grid md:grid-cols-2 gap-14 items-start">
 

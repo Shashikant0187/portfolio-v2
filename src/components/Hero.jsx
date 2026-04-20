@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 function Hero() {
   return (
-    <section className="px-8 md:px-16 py-24 grid md:grid-cols-2 gap-14 items-center">
+    <section className="px-8 md:px-16 py-24 grid md:grid-cols-2 gap-14 items-center snap-start">
 
       {/* Left */}
       <motion.div

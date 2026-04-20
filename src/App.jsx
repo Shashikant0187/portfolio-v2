@@ -12,7 +12,7 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="bg-gradient-to-b from-[#d9f5f3] to-[#eefcfb] text-slate-900 overflow-x-hidden">
+    <div className="h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth bg-gradient-to-b from-[#d9f5f3] to-[#eefcfb] text-slate-900">
       <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
       <Hero />
       <About />
