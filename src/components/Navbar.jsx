@@ -13,7 +13,7 @@ function Navbar({ menuOpen, setMenuOpen }) {
 
         {/* Logo */}
         <a
-          href="#"
+          href="/"
           className="text-2xl font-bold tracking-wide text-teal-400"
         >
           Shashikant

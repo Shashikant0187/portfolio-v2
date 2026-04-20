@@ -1,7 +1,11 @@
 // src/components/Contact.jsx
 
 import { motion } from "framer-motion";
-import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
+import {
+  FaGithub,
+  FaLinkedin,
+  FaEnvelope,
+} from "react-icons/fa";
 
 function Contact() {
   return (
@@ -21,18 +25,23 @@ function Contact() {
             CONTACT
           </p>
 
-          <h2 className="text-4xl md:text-5xl font-bold mt-4 leading-tight">
-            Let’s Build Something Great Together
+          {/* Availability Badge */}
+          <p className="mt-4 inline-block bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium">
+            Open to Opportunities
+          </p>
+
+          <h2 className="text-4xl md:text-5xl font-bold mt-6 leading-tight">
+            Let’s Build Reliable Systems Together
           </h2>
 
           <p className="mt-6 text-lg text-gray-700 leading-8 max-w-xl">
             I’m open to DevOps, Cloud, Infrastructure and IT opportunities.
-            If you’re hiring or would like to connect, feel free to reach out.
+            If you're hiring or would like to collaborate, feel free to connect.
           </p>
         </div>
 
-        {/* Right */}
-        <div className="bg-[#d9f5f3] rounded-3xl p-8 shadow-lg">
+        {/* Right Card */}
+        <div className="bg-gradient-to-br from-[#d9f5f3] to-white border border-teal-100 rounded-3xl p-8 shadow-xl">
 
           <div className="space-y-6">
 
@@ -66,19 +75,25 @@ function Contact() {
               <FaLinkedin className="text-2xl text-blue-600" />
               linkedin.com/in/shashikant-uikey
             </a>
-
           </div>
 
-          {/* CTA */}
-          <div className="mt-10">
+          {/* CTA Buttons */}
+          <div className="mt-10 flex gap-4 flex-wrap">
             <a
               href="mailto:shashikantuikey18@gmail.com"
               className="inline-block bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-7 py-3 rounded-xl shadow-lg hover:scale-105 transition"
             >
               Send Email
             </a>
-          </div>
 
+            <a
+              href="/Shashikant_Uikey_Resume.pdf"
+              download
+              className="inline-block border-2 border-slate-900 px-7 py-3 rounded-xl hover:bg-slate-900 hover:text-white transition"
+            >
+              Resume
+            </a>
+          </div>
         </div>
       </div>
 
