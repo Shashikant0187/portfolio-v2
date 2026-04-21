@@ -1,7 +1,13 @@
 // src/components/Hero.jsx
 
-import { FaGithub, FaLinkedin, FaDocker, FaAws } from "react-icons/fa";
-import { SiKubernetes, SiPrometheus } from "react-icons/si";
+import { FaGithub, FaLinkedin, FaDocker, FaAws, FaLinux, FaGitAlt } from "react-icons/fa";
+import {
+  SiKubernetes,
+  SiPrometheus,
+  SiGrafana,
+  SiGithubactions,
+  SiNginx
+} from "react-icons/si";
 import { motion } from "framer-motion";
 
 function Hero() {
@@ -79,36 +85,77 @@ function Hero() {
       </motion.div>
 
       {/* Right */}
-      <motion.div
-        initial={{ opacity: 0, x: 60 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8 }}
-        className="relative flex justify-center"
-      >
-        <motion.div
-          animate={{ y: [0, -10, 0] }}
-          transition={{ repeat: Infinity, duration: 3 }}
-          className="w-80 h-80 rounded-full bg-gradient-to-br from-teal-400 to-cyan-300 shadow-2xl flex items-center justify-center text-8xl text-white font-bold"
-        >
-          S
-        </motion.div>
+<motion.div
+  initial={{ opacity: 0, x: 60 }}
+  animate={{ opacity: 1, x: 0 }}
+  transition={{ duration: 0.8 }}
+  className="relative flex justify-center items-center h-[500px]"
+>
+  {/* Center Sphere */}
+  <motion.div
+    animate={{
+      y: [0, -12, 0],
+      boxShadow: [
+        "0 0 30px rgba(20,184,166,0.25)",
+        "0 0 60px rgba(20,184,166,0.45)",
+        "0 0 30px rgba(20,184,166,0.25)",
+      ],
+    }}
+    transition={{ repeat: Infinity, duration: 4 }}
+    className="w-150 h-150 rounded-full bg-gradient-to-br from-teal-400 to-cyan-300 flex items-center justify-center text-8xl text-white font-bold"
+  >
+    S
+  </motion.div>
 
-        <div className="absolute top-0 left-8 bg-white p-4 rounded-xl shadow text-3xl">
-          <FaDocker className="text-blue-500" />
-        </div>
+  {/* Floating Icons */}
 
-        <div className="absolute bottom-10 left-0 bg-white p-4 rounded-xl shadow text-3xl">
-          <SiKubernetes className="text-blue-700" />
-        </div>
-
-        <div className="absolute top-10 right-0 bg-white p-4 rounded-xl shadow text-3xl">
-          <FaAws className="text-orange-500" />
-        </div>
-
-        <div className="absolute bottom-0 right-10 bg-white p-4 rounded-xl shadow text-3xl">
-          <SiPrometheus className="text-orange-600" />
-        </div>
-      </motion.div>
+  {[
+    {
+      icon: <FaDocker className="text-blue-500" />,
+      cls: "top-0 left-16",
+    },
+    {
+      icon: <SiKubernetes className="text-blue-700" />,
+      cls: "bottom-12 left-0",
+    },
+    {
+      icon: <FaAws className="text-orange-500" />,
+      cls: "top-10 right-0",
+    },
+    {
+      icon: <SiPrometheus className="text-orange-600" />,
+      cls: "bottom-0 right-10",
+    },
+    {
+      icon: <FaLinux className="text-yellow-500" />,
+      cls: "top-36 left-0",
+    },
+    {
+      icon: <SiGithubactions className="text-purple-500" />,
+      cls: "top-28 right-24",
+    },
+    {
+      icon: <SiGrafana className="text-orange-400" />,
+      cls: "bottom-24 right-28",
+    },
+    {
+      icon: <SiNginx className="text-green-600" />,
+      cls: "bottom-24 left-24",
+    },
+  ].map((item, i) => (
+    <motion.div
+      key={i}
+      animate={{ y: [0, -8, 0] }}
+      transition={{
+        repeat: Infinity,
+        duration: 2 + i * 0.4,
+      }}
+      className={`absolute ${item.cls} bg-white p-4 rounded-xl shadow-xl text-3xl`}
+    >
+      {item.icon}
+    </motion.div>
+  ))}
+</motion.div>
     </section>
   );
 }
