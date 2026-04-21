@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 
 function Hero() {
   return (
-    <section className="min-h-screen px-8 md:px-16 py-10 grid md:grid-cols-2 gap-14 items-center bg-[#d9f5f3] snap-start">
+    <section className="min-h-screen px-8 md:px-16 py-10 grid md:grid-cols-2 gap-14 items-center bg-[#d9f5f3]">
 
       {/* Left */}
       <motion.div
@@ -102,7 +102,7 @@ function Hero() {
       ],
     }}
     transition={{ repeat: Infinity, duration: 4 }}
-    className="w-150 h-150 rounded-full bg-gradient-to-br from-teal-400 to-cyan-300 flex items-center justify-center text-8xl text-white font-bold"
+    className="w-80 h-80 rounded-full bg-gradient-to-br from-teal-400 to-cyan-300 flex items-center justify-center text-8xl text-white font-bold"
   >
     S
   </motion.div>

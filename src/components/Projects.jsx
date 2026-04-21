@@ -60,7 +60,7 @@ function Projects() {
   return (
     <section
       id="projects"
-      className="px-8 md:px-16 py-24 bg-[#0f172a] text-white snap-start"
+      className="px-8 md:px-16 py-24 bg-[#0f172a] text-white"
     >
       <p className="text-teal-400 font-semibold tracking-wide">
         PROJECTS

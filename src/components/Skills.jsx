@@ -37,7 +37,7 @@ const skills = [
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
       viewport={{ once: true }}
-      className="px-8 md:px-16 py-24 snap-start min-h-screen"
+      className="px-8 md:px-16 py-24"
     >
       <p className="text-teal-600 font-semibold tracking-wide">
         SKILLS
