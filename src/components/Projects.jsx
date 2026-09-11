@@ -1,6 +1,6 @@
 // src/components/Projects.jsx
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 import {
@@ -14,72 +14,73 @@ import {
   SiDocker,
 } from "react-icons/si";
 
+import { api } from "../services/api";
+
 function Projects() {
   const [showAll, setShowAll] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const projects = [
-    {
-      number: "01",
-      title: "DeployNow",
-      category: "FULL STACK + DEVOPS",
-      desc: "A full-stack deployment platform that connects application development with automated deployment workflows, containerization and real-time deployment logs.",
-      tech: [
-        "React",
-        "Node.js",
-        "Express.js",
-        "Docker",
-        "GitHub Actions",
-        "Socket.IO",
-      ],
-      icon: <SiDocker />,
-      featured: true,
-    },
+  useEffect(() => {
+    const loadProjects = async () => {
+      try {
+        setLoading(true);
+        setError("");
 
-    {
-      number: "02",
-      title: "Monitoring Stack",
-      category: "OBSERVABILITY",
-      desc: "Built Prometheus and Grafana monitoring dashboards with alerting for infrastructure and workloads.",
-      tech: ["Prometheus", "Grafana", "Monitoring"],
-      icon: <SiPrometheus />,
-    },
+        const data = await api.getProjects();
 
-    {
-      number: "03",
-      title: "Portfolio Auto Deploy",
-      category: "WEB + CI/CD",
-      desc: "React portfolio connected to GitHub with automated deployment through Vercel.",
-      tech: ["React", "Vercel", "CI/CD"],
-      icon: <FaExternalLinkAlt />,
-    },
+        const formattedProjects = data.projects.map(
+          (project, index) => ({
+            ...project,
 
-    {
-      number: "04",
-      title: "Dockerized App Deployment",
-      category: "CONTAINERS",
-      desc: "Containerized applications using Docker with a focus on repeatable deployment and Linux-based environments.",
-      tech: ["Docker", "Linux"],
-      icon: <SiDocker />,
-    },
+            number: String(index + 1).padStart(2, "0"),
 
-    {
-      number: "05",
-      title: "Kubernetes Scaling Lab",
-      category: "ORCHESTRATION",
-      desc: "Hands-on Kubernetes work involving replicas, rolling updates and service exposure.",
-      tech: ["Kubernetes", "Scaling"],
-      icon: <SiKubernetes />,
-    },
+            desc: project.description,
 
-    {
-      number: "06",
-      title: "Linux Server Operations",
-      category: "INFRASTRUCTURE",
-      desc: "Hands-on Linux operations, troubleshooting and infrastructure support in production-oriented environments.",
-      tech: ["Linux", "Operations"],
-      icon: <FaLinux />,
-    },
-  ];
+            tech: project.technologies || [],
+
+            icon:
+              project.technologies?.some(
+                (technology) =>
+                  technology.toLowerCase() === "kubernetes"
+              )
+                ? <SiKubernetes />
+                : project.technologies?.some(
+                      (technology) =>
+                        technology.toLowerCase() === "prometheus"
+                    )
+                  ? <SiPrometheus />
+                  : project.technologies?.some(
+                        (technology) =>
+                          technology.toLowerCase() === "docker"
+                      )
+                    ? <SiDocker />
+                    : project.technologies?.some(
+                          (technology) =>
+                            technology.toLowerCase() === "linux"
+                        )
+                      ? <FaLinux />
+                      : <FaExternalLinkAlt />,
+
+            featured: index === 0,
+          })
+        );
+
+        setProjects(formattedProjects);
+      } catch (error) {
+        console.error("Failed to load projects:", error);
+
+        setError(
+          error.message || "Unable to load projects."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProjects();
+  }, []);
 
   const visibleProjects = showAll
     ? projects
@@ -90,13 +91,11 @@ function Projects() {
       id="projects"
       className="relative overflow-hidden bg-[#07111f] px-8 md:px-16 py-24 text-white"
     >
-
       {/* Background Glows */}
 
       <div className="absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full bg-teal-500/5 blur-3xl pointer-events-none" />
 
       <div className="absolute bottom-0 -right-40 w-[500px] h-[500px] rounded-full bg-cyan-500/5 blur-3xl pointer-events-none" />
-
 
       <div className="relative z-10 max-w-[1500px] mx-auto">
 
@@ -119,272 +118,323 @@ function Projects() {
 
         </div>
 
+        {/* Loading State */}
+
+        {loading && (
+          <div className="mt-14 rounded-3xl border border-white/10 bg-white/[0.03] p-10 text-center">
+            <p className="text-slate-400">
+              Loading projects...
+            </p>
+          </div>
+        )}
+
+        {/* Error State */}
+
+        {!loading && error && (
+          <div className="mt-14 rounded-3xl border border-red-400/20 bg-red-400/5 p-10 text-center">
+            <p className="text-red-400 font-medium">
+              Unable to load projects.
+            </p>
+
+            <p className="mt-2 text-sm text-slate-500">
+              {error}
+            </p>
+          </div>
+        )}
+
+        {/* Empty State */}
+
+        {!loading && !error && projects.length === 0 && (
+          <div className="mt-14 rounded-3xl border border-white/10 bg-white/[0.03] p-10 text-center">
+            <p className="text-slate-400">
+              No projects available.
+            </p>
+          </div>
+        )}
 
         {/* Project Grid */}
 
-        <div className="grid lg:grid-cols-2 gap-6 mt-14">
+        {!loading && !error && projects.length > 0 && (
+          <div className="grid lg:grid-cols-2 gap-6 mt-14">
 
-          {visibleProjects.map((project, index) => (
+            {visibleProjects.map((project, index) => (
 
-            <motion.article
-              key={project.number}
+              <motion.article
+                key={project.id}
+                initial={{
+                  opacity: 0,
+                  y: 30,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                viewport={{
+                  once: true,
+                }}
+                transition={{
+                  duration: 0.5,
+                  delay: index * 0.08,
+                }}
+                whileHover={{
+                  y: -6,
+                }}
+                className={`
+                  group
+                  relative
+                  overflow-hidden
+                  rounded-3xl
+                  border
+                  p-7
+                  md:p-8
+                  transition-all
+                  duration-300
 
-              initial={{
-                opacity: 0,
-                y: 30,
-              }}
-
-              whileInView={{
-                opacity: 1,
-                y: 0,
-              }}
-
-              viewport={{
-                once: true,
-              }}
-
-              transition={{
-                duration: 0.5,
-                delay: index * 0.08,
-              }}
-
-              whileHover={{
-                y: -6,
-              }}
-
-              className={`
-                group
-                relative
-                overflow-hidden
-                rounded-3xl
-                border
-                p-7
-                md:p-8
-                transition-all
-                duration-300
-
-                ${
-                  project.featured
-                    ? "lg:col-span-2 bg-gradient-to-br from-teal-400/[0.08] via-white/[0.03] to-cyan-400/[0.04] border-teal-400/20"
-                    : "bg-white/[0.03] border-white/10 hover:border-teal-400/20 hover:bg-white/[0.045]"
-                }
-              `}
-            >
-
-              {/* Featured Glow */}
-
-              {project.featured && (
-                <div className="absolute -top-32 -right-32 w-72 h-72 rounded-full bg-teal-400/10 blur-3xl pointer-events-none" />
-              )}
-
-
-              <div className="relative">
-
-                {/* Top Row */}
-
-                <div className="flex items-start justify-between">
-
-                  <div className="flex items-center gap-3">
-
-                    <span className="font-mono text-sm text-teal-400">
-                      /{project.number}
-                    </span>
-
-                    <span className="h-px w-8 bg-white/10" />
-
-                    <span className="text-[11px] tracking-[0.15em] text-slate-500">
-                      {project.category}
-                    </span>
-
-                  </div>
-
-
-                  {/* Project Status */}
-
-                  <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
-
-                    <span className="w-1.5 h-1.5 rounded-full bg-teal-400" />
-
-                    HANDS-ON
-
-                  </div>
-
-                </div>
-
-
-                {/* Project Content */}
-
-                <div
-                  className={
+                  ${
                     project.featured
-                      ? "grid md:grid-cols-[1fr_auto] gap-8 items-start mt-8"
-                      : "mt-8"
+                      ? "lg:col-span-2 bg-gradient-to-br from-teal-400/[0.08] via-white/[0.03] to-cyan-400/[0.04] border-teal-400/20"
+                      : "bg-white/[0.03] border-white/10 hover:border-teal-400/20 hover:bg-white/[0.045]"
                   }
-                >
+                `}
+              >
 
-                  {/* Project Information */}
+                {/* Featured Glow */}
 
-                  <div>
+                {project.featured && (
+                  <div className="absolute -top-32 -right-32 w-72 h-72 rounded-full bg-teal-400/10 blur-3xl pointer-events-none" />
+                )}
 
-                    <div className="flex items-center gap-4">
+                <div className="relative">
 
-                      <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-white/[0.05] border border-white/10 text-2xl text-teal-400">
-                        {project.icon}
-                      </div>
+                  {/* Top Row */}
 
-                      <h3 className="text-2xl md:text-3xl font-bold text-white">
-                        {project.title}
-                      </h3>
+                  <div className="flex items-start justify-between gap-4">
+
+                    <div className="flex items-center gap-3">
+
+                      <span className="font-mono text-sm text-teal-400">
+                        /{project.number}
+                      </span>
+
+                      <span className="h-px w-8 bg-white/10" />
+
+                      <span className="text-[11px] tracking-[0.15em] text-slate-500">
+                        {project.category || "ENGINEERING"}
+                      </span>
 
                     </div>
 
+                    {/* Project Status */}
 
-                    <p className="mt-5 text-slate-400 leading-7 max-w-2xl">
-                      {project.desc}
-                    </p>
+                    <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
 
+                      <span className="w-1.5 h-1.5 rounded-full bg-teal-400" />
 
-                    {/* Technologies */}
-
-                    <div className="flex flex-wrap gap-2.5 mt-6">
-
-                      {project.tech.map((item) => (
-
-                        <span
-                          key={item}
-                          className="
-                            px-3
-                            py-1.5
-                            rounded-lg
-                            bg-white/[0.04]
-                            border
-                            border-white/10
-                            text-sm
-                            text-slate-300
-                            group-hover:border-teal-400/15
-                            transition-colors
-                          "
-                        >
-                          {item}
-                        </span>
-
-                      ))}
+                      HANDS-ON
 
                     </div>
 
                   </div>
 
+                  {/* Project Content */}
 
-                  {/* DeployNow Architecture */}
+                  <div
+                    className={
+                      project.featured
+                        ? "grid md:grid-cols-[1fr_auto] gap-8 items-start mt-8"
+                        : "mt-8"
+                    }
+                  >
 
-                  {project.featured && (
+                    {/* Project Information */}
 
-                    <div className="hidden md:block w-72">
+                    <div>
 
-                      <div className="rounded-2xl border border-white/10 bg-[#07111f]/70 p-5 font-mono text-xs">
+                      <div className="flex items-center gap-4">
 
-                        {/* Terminal Header */}
-
-                        <div className="flex items-center gap-2 mb-5">
-
-                          <span className="w-2 h-2 rounded-full bg-red-400/70" />
-
-                          <span className="w-2 h-2 rounded-full bg-yellow-400/70" />
-
-                          <span className="w-2 h-2 rounded-full bg-green-400/70" />
-
-                          <span className="ml-auto text-slate-600">
-                            deploynow
-                          </span>
-
+                        <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-white/[0.05] border border-white/10 text-2xl text-teal-400">
+                          {project.icon}
                         </div>
 
+                        <h3 className="text-2xl md:text-3xl font-bold text-white">
+                          {project.title}
+                        </h3>
 
-                        {/* Architecture Flow */}
+                      </div>
 
-                        <div className="space-y-3">
+                      <p className="mt-5 text-slate-400 leading-7 max-w-2xl">
+                        {project.desc}
+                      </p>
 
-                          <div className="flex items-center justify-between">
+                      {/* Technologies */}
 
-                            <span className="text-slate-500">
-                              frontend
+                      {project.tech.length > 0 && (
+                        <div className="flex flex-wrap gap-2.5 mt-6">
+
+                          {project.tech.map((item) => (
+
+                            <span
+                              key={item}
+                              className="
+                                px-3
+                                py-1.5
+                                rounded-lg
+                                bg-white/[0.04]
+                                border
+                                border-white/10
+                                text-sm
+                                text-slate-300
+                                group-hover:border-teal-400/15
+                                transition-colors
+                              "
+                            >
+                              {item}
                             </span>
 
-                            <span className="text-cyan-400">
-                              React
+                          ))}
+
+                        </div>
+                      )}
+
+                      {/* Project Links */}
+
+                      {(project.github_url || project.live_url) && (
+                        <div className="flex flex-wrap items-center gap-5 mt-6">
+
+                          {project.github_url && (
+                            <a
+                              href={project.github_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 text-sm font-medium text-slate-300 hover:text-teal-300 transition-colors"
+                            >
+                              GitHub
+
+                              <FaExternalLinkAlt className="text-xs" />
+                            </a>
+                          )}
+
+                          {project.live_url && (
+                            <a
+                              href={project.live_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 text-sm font-medium text-teal-400 hover:text-teal-300 transition-colors"
+                            >
+                              Live Demo
+
+                              <FaExternalLinkAlt className="text-xs" />
+                            </a>
+                          )}
+
+                        </div>
+                      )}
+
+                    </div>
+
+                    {/* Featured Architecture */}
+
+                    {project.featured && (
+
+                      <div className="hidden md:block w-72">
+
+                        <div className="rounded-2xl border border-white/10 bg-[#07111f]/70 p-5 font-mono text-xs">
+
+                          {/* Terminal Header */}
+
+                          <div className="flex items-center gap-2 mb-5">
+
+                            <span className="w-2 h-2 rounded-full bg-red-400/70" />
+
+                            <span className="w-2 h-2 rounded-full bg-yellow-400/70" />
+
+                            <span className="w-2 h-2 rounded-full bg-green-400/70" />
+
+                            <span className="ml-auto text-slate-600">
+                              deploynow
                             </span>
 
                           </div>
 
+                          {/* Architecture Flow */}
 
-                          <div className="text-teal-400 text-center">
-                            ↓
-                          </div>
+                          <div className="space-y-3">
 
+                            <div className="flex items-center justify-between">
 
-                          <div className="flex items-center justify-between">
+                              <span className="text-slate-500">
+                                frontend
+                              </span>
 
-                            <span className="text-slate-500">
-                              backend
-                            </span>
+                              <span className="text-cyan-400">
+                                React
+                              </span>
 
-                            <span className="text-green-400">
-                              Node.js
-                            </span>
+                            </div>
 
-                          </div>
+                            <div className="text-teal-400 text-center">
+                              ↓
+                            </div>
 
+                            <div className="flex items-center justify-between">
 
-                          <div className="text-teal-400 text-center">
-                            ↓
-                          </div>
+                              <span className="text-slate-500">
+                                backend
+                              </span>
 
+                              <span className="text-green-400">
+                                Node.js
+                              </span>
 
-                          <div className="flex items-center justify-between">
+                            </div>
 
-                            <span className="text-slate-500">
-                              container
-                            </span>
+                            <div className="text-teal-400 text-center">
+                              ↓
+                            </div>
 
-                            <span className="text-blue-400">
-                              Docker
-                            </span>
+                            <div className="flex items-center justify-between">
 
-                          </div>
+                              <span className="text-slate-500">
+                                container
+                              </span>
 
+                              <span className="text-blue-400">
+                                Docker
+                              </span>
 
-                          <div className="text-teal-400 text-center">
-                            ↓
-                          </div>
+                            </div>
 
+                            <div className="text-teal-400 text-center">
+                              ↓
+                            </div>
 
-                          <div className="flex items-center justify-between">
+                            <div className="flex items-center justify-between">
 
-                            <span className="text-slate-500">
-                              deployment
-                            </span>
+                              <span className="text-slate-500">
+                                deployment
+                              </span>
 
-                            <span className="text-purple-400">
-                              CI/CD
-                            </span>
+                              <span className="text-purple-400">
+                                CI/CD
+                              </span>
 
-                          </div>
+                            </div>
 
+                            <div className="text-teal-400 text-center">
+                              ↓
+                            </div>
 
-                          <div className="text-teal-400 text-center">
-                            ↓
-                          </div>
+                            <div className="flex items-center justify-between">
 
+                              <span className="text-slate-500">
+                                logs
+                              </span>
 
-                          <div className="flex items-center justify-between">
+                              <span className="text-teal-400">
+                                Socket.IO
+                              </span>
 
-                            <span className="text-slate-500">
-                              logs
-                            </span>
-
-                            <span className="text-teal-400">
-                              Socket.IO
-                            </span>
+                            </div>
 
                           </div>
 
@@ -392,59 +442,60 @@ function Projects() {
 
                       </div>
 
-                    </div>
+                    )}
 
-                  )}
+                  </div>
 
                 </div>
 
-              </div>
+              </motion.article>
 
-            </motion.article>
+            ))}
 
-          ))}
-
-        </div>
-
+          </div>
+        )}
 
         {/* View More Button */}
 
-        <div className="flex justify-center mt-12">
+        {!loading &&
+          !error &&
+          projects.length > 3 && (
+            <div className="flex justify-center mt-12">
 
-          <button
-            onClick={() => setShowAll(!showAll)}
-            className="
-              group
-              flex
-              items-center
-              gap-3
-              px-7
-              py-3
-              rounded-xl
-              bg-white/[0.04]
-              border
-              border-white/10
-              text-slate-200
-              font-semibold
-              hover:bg-teal-400/10
-              hover:border-teal-400/30
-              hover:text-teal-300
-              transition-all
-            "
-          >
+              <button
+                onClick={() => setShowAll(!showAll)}
+                className="
+                  group
+                  flex
+                  items-center
+                  gap-3
+                  px-7
+                  py-3
+                  rounded-xl
+                  bg-white/[0.04]
+                  border
+                  border-white/10
+                  text-slate-200
+                  font-semibold
+                  hover:bg-teal-400/10
+                  hover:border-teal-400/30
+                  hover:text-teal-300
+                  transition-all
+                "
+              >
 
-            {showAll
-              ? "Show Less"
-              : "View More Projects"}
+                {showAll
+                  ? "Show Less"
+                  : "View More Projects"}
 
-            <span className="group-hover:translate-x-1 transition-transform">
-              {showAll ? "↑" : "→"}
-            </span>
+                <span className="group-hover:translate-x-1 transition-transform">
+                  {showAll ? "↑" : "→"}
+                </span>
 
-          </button>
+              </button>
 
-        </div>
-
+            </div>
+          )}
 
         {/* Bottom Engineering Statement */}
 
